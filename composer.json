@@ -1,0 +1,19 @@
+{
+	"name": "raymond-byczko/who-is-around-who-website",
+	"autoload": {
+		"psr-4": {
+		    "RaymondByczko\\WhoIsAroundWhoWebsite\\":"src/"
+		}
+    	},
+
+	"require": {
+		"raymond-byczko/who-is-around-who":"dev-master",
+		"apache/log4php": "^2.3"
+	},
+	"require-dev": {
+		"raymond-byczko/who-is-around-who":"dev-master",
+		"phpunit/phpunit": "^8.2"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
