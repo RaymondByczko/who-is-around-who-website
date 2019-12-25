@@ -17,6 +17,26 @@ $sid = session_id();
 $log->debug("session id=".$sid);
 
 ?>
+<?php
+$pathName = '193204.json';
+$resultArchive = '';
+$foundHere = NULL;
+try {
+	if (isset($_POST['findThis']))
+	{
+		$findThis = $_POST['findThis'];
+		$testContents = \WhoIsAroundWho\JSONArchiveApi::readContentsJSON($pathName);
+		\WhoIsAroundWho\JSONArchiveApi::checkStructure();
+		$resultArchive .= "193204.json: read, structure good";
+
+		$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
+	}
+}
+catch (Exception $e)
+{
+	$resultArchive .= $e->getMessage();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,17 +65,41 @@ $log->debug("session id=".$sid);
 <section>
 <div class="container2">
 <div id="form_maken">
-<form action="/Utilities/pickMonthYear.php" method="post">
+<form action="/index.php" method="post">
 Pick Year:<br>
 <input type="text" name="someYear" value="0">
 <br><br>
 Pick Month:<br>
 <input type="text" name="someMonth" value="">
 <br><br>
+Find:<br>
+<input type="text" name="findThis" value="">
+<br><br>
 <input type="submit" value="Submit">
 </form>
 </div>
 </div>
+</section>
+<section>
+<?php
+$resultOutput = NULL;
+try {
+	if ($foundHere != NULL)
+	{
+		foreach($foundHere as $key=>$value)
+		{
+
+			$pd = \WhoIsAroundWho\JSONArchiveApi::$m_phpContent['response']['docs'][$value]['pub_date'];
+			$lp = \WhoIsAroundWho\JSONArchiveApi::$m_phpContent['response']['docs'][$value]['lead_paragraph'];
+			echo '<br> ... '.$pd.' #### '.$lp;
+		}
+	}
+}
+catch (Exception $e)
+{
+	$resultOutput .= $e->getMessage();
+}
+?>
 </section>
 </body>
 </html>
