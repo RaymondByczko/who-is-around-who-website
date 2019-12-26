@@ -17,6 +17,19 @@ $sid = session_id();
 $log->debug("session id=".$sid);
 
 ?>
+
+<?php
+$storageDir = 'jsondata/';
+$jsonFiles = \WhoIsAroundWho\JSONArchiveApi::getAvailableJSONFiles($storageDir);
+
+/* @todo Possible poor name for jsonYearMonths because its not json encoded. */
+$jsonYearsMonths = \WhoIsAroundWho\JSONArchiveApi::getAvailableJSONYearsMonths($storageDir);
+$log->debug("jsonYearsMonths=".var_export($jsonYearsMonths, TRUE));
+$jsonEncodeYM = json_encode($jsonYearsMonths);
+?>
+<script>
+var jsonEncodeYM=<?php echo $jsonEncodeYM; ?>;
+</script>
 <?php
 $pathName = '193204.json';
 $resultArchive = '';
@@ -75,6 +88,22 @@ Pick Month:<br>
 Find:<br>
 <input type="text" name="findThis" value="">
 <br><br>
+PICK YEAR:<br>
+<select id="id_year" name="spYear">
+<?php
+foreach ($jsonYearsMonths as $y=>$valM)
+{
+?>
+	<option value=<?php echo '"'.$y.'">'.$y;?></option>
+<?
+}
+?>
+</select>
+<br><br>
+PICK MONTH:<br>
+<select id="id_month" name="spMonth">
+</select>
+<br><br>
 <input type="submit" value="Submit">
 </form>
 </div>
@@ -101,5 +130,16 @@ catch (Exception $e)
 }
 ?>
 </section>
+<script>
+var y = document.getElementById("id_year");
+y.addEventListener("change", function() {
+	alert("changed year: new year="+y.value);
+});
+
+var m = document.getElementById("id_month");
+var option = document.createElement("option");
+option.text = "05";
+m.add(option);
+</script>
 </body>
 </html>
