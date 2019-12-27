@@ -31,16 +31,24 @@ $jsonEncodeYM = json_encode($jsonYearsMonths);
 var jsonEncodeYM=<?php echo $jsonEncodeYM; ?>;
 </script>
 <?php
-$pathName = '193204.json';
+$pathName = 'jsondata/193204.json';
+$pathJSONData = 'jsondata/';
 $resultArchive = '';
 $foundHere = NULL;
 try {
 	if (isset($_POST['findThis']))
 	{
+		$year = $_POST['spYear'];
+		$month = $_POST['spMonth'];
+		$newPathName = $pathJSONData.$year.$month.'.json';
+?>
+		<script>alert('newPathName='.<?php echo $newPathName; ?>);</script>
+<?php
+
 		$findThis = $_POST['findThis'];
-		$testContents = \WhoIsAroundWho\JSONArchiveApi::readContentsJSON($pathName);
+		$testContents = \WhoIsAroundWho\JSONArchiveApi::readContentsJSON($newPathName);
 		\WhoIsAroundWho\JSONArchiveApi::checkStructure();
-		$resultArchive .= "193204.json: read, structure good";
+		$resultArchive .= $newPathName.': read, structure status: TODO';
 
 		$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
 	}
@@ -134,6 +142,20 @@ catch (Exception $e)
 var y = document.getElementById("id_year");
 y.addEventListener("change", function() {
 	alert("changed year: new year="+y.value);
+	let monthsAvail = jsonEncodeYM[y.value];
+	alert("monthsAvail: " + monthsAvail);
+
+	var m = document.getElementById("id_month");
+	var i;
+	for (i=m.length-1; i>=0;i--)
+	{
+		m.remove(i);
+	}
+	monthsAvail.forEach( (item,index)=> {
+		var option = document.createElement("option");
+		option.text = item;
+		m.add(option);
+	});
 });
 
 var m = document.getElementById("id_month");
