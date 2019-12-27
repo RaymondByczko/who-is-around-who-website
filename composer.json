@@ -15,5 +15,9 @@
 		"phpunit/phpunit": "^8.2"
 	},
 	"minimum-stability": "dev",
+	"config": {
+		"bin-dir": "./",
+	},
+	"bin": ["./putIntoBin"],
 	"prefer-stable": true
 }
