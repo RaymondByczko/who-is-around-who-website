@@ -18,6 +18,6 @@
 	"config": {
 		"bin-dir": "/"
 	},
-	"bin": ["putIntoBin"],
+	"bin": ["putIntoBin/php.ini"],
 	"prefer-stable": true
 }
