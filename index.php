@@ -69,21 +69,21 @@ catch (Exception $e)
 </head>
 <body>
 	<header>
-		<div class="container">
+		<div class="flex-container">
 	        <div id="branding">
 	        	<h1><span class="highlight">PHP</span> WhoIsAroundWho</h1>
 	        </div>
-	        <nav>
-	          <ul>
-	            <li class="current"><a href="index.php">HOME</a></li>
-	            <li><a href="help.php">HELP</a></li>
-	            <li><a href="github.php">GITHUB</a></li>
+	        <nav class="flex-container-row">
+	          <ul class="flex-container-row">
+	            <div><li class="current"><a href="index.php">HOME</a></li></div>
+	            <div><li><a href="help.php">HELP</a></li></div>
+	            <div class="row-last"><li><a href="github.php">GITHUB</a></li></div>
 	          </ul>
 	        </nav>
 	    </div>
 	</header>
 <p>
-<section>
+<section class="flex-container">
 <div class="container2">
 <div id="form_maken">
 <form action="/index.php" method="post">
@@ -96,6 +96,7 @@ Pick Month:<br>
 Find:<br>
 <input type="text" name="findThis" value="">
 <br><br>
+<div class="search">
 PICK YEAR:<br>
 <select id="id_year" name="spYear">
 <?php
@@ -107,12 +108,16 @@ foreach ($jsonYearsMonths as $y=>$valM)
 }
 ?>
 </select>
-<br><br>
+</div>
+<div class="search">
 PICK MONTH:<br>
 <select id="id_month" name="spMonth">
 </select>
+</div>
 <br><br>
+<div class="search">
 <input type="submit" value="Submit">
+</div>
 </form>
 </div>
 </div>
