@@ -15,9 +15,6 @@
 		"phpunit/phpunit": "^8.2"
 	},
 	"minimum-stability": "dev",
-	"config": {
-		"bin-dir": "/"
-	},
-	"bin": ["putIntoBin"],
+	"bin": ["putIntoBin/php.ini"],
 	"prefer-stable": true
 }
