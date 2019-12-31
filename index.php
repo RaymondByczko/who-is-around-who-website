@@ -50,7 +50,15 @@ try {
 		\WhoIsAroundWho\JSONArchiveApi::checkStructure();
 		$resultArchive .= $newPathName.': read, structure status: TODO';
 
-		$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
+		$memcache = new Memcache;
+		$memcache->connect('127.0.0.1', 11211) or die ("Could not connect to Memcache");
+		$foundHere = $memcache->get($findThis);
+		if ($foundHere === FALSE)
+		{
+			$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
+			// $memcache->set($findThis, $foundHere, MEMCACHE_COMPRESSED, 600);
+			$memcache->set($findThis, $foundHere, 0, 600);
+		}
 	}
 }
 catch (Exception $e)
