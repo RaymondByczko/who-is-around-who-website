@@ -3,6 +3,8 @@ require 'vendor/autoload.php';
 session_name('sn-WhoIsAroundWho-website');
 session_start();
 
+// use WhoIsAroundWho\CacheUtility as CacheUtility;
+
  
 // Tell log4php to use our configuration file.
 Logger::configure('config/config.xml');
@@ -49,16 +51,24 @@ try {
 		$testContents = \WhoIsAroundWho\JSONArchiveApi::readContentsJSON($newPathName);
 		\WhoIsAroundWho\JSONArchiveApi::checkStructure();
 		$resultArchive .= $newPathName.': read, structure status: TODO';
-
-		$memcache = new Memcache;
-		$memcache->connect('127.0.0.1', 11211) or die ("Could not connect to Memcache");
-		$foundHere = $memcache->get($findThis);
-		if ($foundHere === FALSE)
+		if (FALSE)
 		{
-			$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
-			// $memcache->set($findThis, $foundHere, MEMCACHE_COMPRESSED, 600);
-			$memcache->set($findThis, $foundHere, 0, 600);
+			$memcache = new Memcache;
+			$memcache->connect('127.0.0.1', 11211) or die ("Could not connect to Memcache");
+			$foundHere = $memcache->get($findThis);
+			if ($foundHere === FALSE)
+			{
+				$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
+				// $memcache->set($findThis, $foundHere, MEMCACHE_COMPRESSED, 600);
+				$memcache->set($findThis, $foundHere, 0, 600);
+			}
 		}
+
+		$objCacheUtility = new \WhoIsAroundWho\CacheUtility();
+		// $objMemcacheWorkhorse = new \WhoIsAroundWho\MemcacheWorkhorse();
+		// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objMemcacheWorkhorse);
+		$objStash = new \WhoIsAroundWho\StashSqliteCacheWorkhorse();
+		$foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
 	}
 }
 catch (Exception $e)
