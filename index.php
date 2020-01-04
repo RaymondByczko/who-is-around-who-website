@@ -4,7 +4,20 @@ session_name('sn-WhoIsAroundWho-website');
 session_start();
 
 // use WhoIsAroundWho\CacheUtility as CacheUtility;
+//
+//
 
+if (isset($_ENV['WHOSITE_CACHEMETHOD']))
+{
+	var_dump('WHOSITE_CACHEMETHOD is set');
+	var_dump('WHOSITE_CACHEMETHOD='.$_ENV['WHOSITE_CACHEMETHOD']);
+	exit();
+}
+else
+{
+	var_dump('WHOSITE_CACHEMETHOD is not set');
+	exit();
+}
  
 // Tell log4php to use our configuration file.
 Logger::configure('config/config.xml');
@@ -58,6 +71,7 @@ try {
 			$foundHere = $memcache->get($findThis);
 			if ($foundHere === FALSE)
 			{
+				// This is the non-cached way, if only the following line is utiilzed.
 				$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
 				// $memcache->set($findThis, $foundHere, MEMCACHE_COMPRESSED, 600);
 				$memcache->set($findThis, $foundHere, 0, 600);
@@ -67,8 +81,12 @@ try {
 		$objCacheUtility = new \WhoIsAroundWho\CacheUtility();
 		// $objMemcacheWorkhorse = new \WhoIsAroundWho\MemcacheWorkhorse();
 		// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objMemcacheWorkhorse);
-		$objStash = new \WhoIsAroundWho\StashSqliteCacheWorkhorse();
-		$foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
+		/// $objStash = new \WhoIsAroundWho\StashSqliteCacheWorkhorse();
+		/// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
+		//// $objStash = new \WhoIsAroundWho\NullCacheWorkhorse();
+		//// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
+		$objWorkhorse = $objCacheUtility->produceCacheWorkhorse();
+		$foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objWorkhorse);
 	}
 }
 catch (Exception $e)
