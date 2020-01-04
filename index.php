@@ -64,27 +64,8 @@ try {
 		$testContents = \WhoIsAroundWho\JSONArchiveApi::readContentsJSON($newPathName);
 		\WhoIsAroundWho\JSONArchiveApi::checkStructure();
 		$resultArchive .= $newPathName.': read, structure status: TODO';
-		if (FALSE)
-		{
-			$memcache = new Memcache;
-			$memcache->connect('127.0.0.1', 11211) or die ("Could not connect to Memcache");
-			$foundHere = $memcache->get($findThis);
-			if ($foundHere === FALSE)
-			{
-				// This is the non-cached way, if only the following line is utiilzed.
-				$foundHere = \WhoIsAroundWho\JSONArchiveApi::find($findThis, 'lead_paragraph');
-				// $memcache->set($findThis, $foundHere, MEMCACHE_COMPRESSED, 600);
-				$memcache->set($findThis, $foundHere, 0, 600);
-			}
-		}
 
 		$objCacheUtility = new \WhoIsAroundWho\CacheUtility();
-		// $objMemcacheWorkhorse = new \WhoIsAroundWho\MemcacheWorkhorse();
-		// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objMemcacheWorkhorse);
-		/// $objStash = new \WhoIsAroundWho\StashSqliteCacheWorkhorse();
-		/// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
-		//// $objStash = new \WhoIsAroundWho\NullCacheWorkhorse();
-		//// $foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objStash);
 		$objWorkhorse = $objCacheUtility->produceCacheWorkhorse();
 		$foundHere = $objCacheUtility->get($findThis, /*ICacheWorkhorse $workhorse*/ $objWorkhorse);
 	}
