@@ -7,6 +7,7 @@ session_start();
 //
 //
 
+/*
 if (isset($_ENV['WHOSITE_CACHEMETHOD']))
 {
 	var_dump('WHOSITE_CACHEMETHOD is set');
@@ -18,6 +19,7 @@ else
 	var_dump('WHOSITE_CACHEMETHOD is not set');
 	exit();
 }
+ */
  
 // Tell log4php to use our configuration file.
 Logger::configure('config/config.xml');
